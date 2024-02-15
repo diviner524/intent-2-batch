@@ -1,0 +1,44 @@
+{
+ "taskGroups": [
+  {
+   "taskSpec": {
+    "runnables": [
+     {
+      "script": {
+       "text": "python /mnt/share/data_processing.py"
+      }
+     }
+    ],
+    "computeResource": {
+     "cpuMilli": 8000,
+     "memoryMib": 32768
+    },
+    "volumes": [
+     {
+      "gcs": {
+       "remotePath": "batchtest"
+      },
+      "mountPath": "/mnt/share"
+     }
+    ],
+    "maxRetryCount": 2,
+    "maxRunDuration": "3600s"
+   },
+   "taskCount": 1,
+   "parallelism": 1
+  }
+ ],
+ "allocationPolicy": {
+  "instances": [
+   {
+    "policy": {
+     "machineType": "n2d-custom-16-128000",
+     "provisioningModel": "PREEMPTIBLE"
+    }
+   }
+  ]
+ },
+ "logsPolicy": {
+  "destination": "CLOUD_LOGGING"
+ }
+}
