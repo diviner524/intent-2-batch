@@ -64,7 +64,6 @@ def multiturn_generate_content():
             'gcloud', 'batch', 'jobs', 'submit', 'example-ai-job-2',
             '--location', 'us-central1',
             '--config', 'job_config.json'
-            '--dry-run'
         ]
 
         # Execute the gcloud command
