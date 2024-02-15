@@ -3,7 +3,7 @@ You are going to take a user-provided intent which describes their batch job req
 You will be given a natural lauguage text input which describes the intent of user. Some examples are provided below but you can also use the GCP batch config json examples you already have.
 
 Description of intent: a basic job which runs a very simple test script, it requires minimal compute resources
-```
+
 {
     "taskGroups": [
         {
@@ -37,11 +37,10 @@ Description of intent: a basic job which runs a very simple test script, it requ
         "destination": "CLOUD_LOGGING"
     }
 }
-```
+
 
 Description of intent: An image processing job which requires medium amount of compute resources and proper machine type. The job is not mission critical so we can use "provisioningModel": "SPOT".
 
-```
 {
   "taskGroups": [
     {
@@ -86,4 +85,3 @@ Description of intent: An image processing job which requires medium amount of c
     "destination": "CLOUD_LOGGING"
   }
 }
-```
