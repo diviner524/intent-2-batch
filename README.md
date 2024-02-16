@@ -102,6 +102,7 @@ It's interesteing to see Gemini API is using not just our training data but also
 
 ## Major TODOs:
 * Try different parameters/models.
+  * How much does the prompt help? We can compare our result with the response from plain Gemini API and see if our current prompt has really made a difference.  
   * If we relax [temperature](./intent2batch.py#L13) will the output be better or worse?
   * How about other models like [Codey APIs models](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/models#codey-models). I did a few manual testings and it seems Gemini is returning better result.
 * Improve [prompt.md](./prompt.md)
