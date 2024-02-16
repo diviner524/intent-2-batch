@@ -101,10 +101,13 @@ We are doing a multi-turn generation between the client and Gemini API. The firs
 It's interesteing to see Gemini API is using not just our training data but also the knowledge from pre-trained model. For example we see the API generates different values for `machineType` and `provisioningModel` while we haven't included these in our training data. There are many more things we can explore and improve!
 
 ## Major TODOs:
+* Try different parameters/models.
+  * If we relax [temperature](./intent2batch.py#L13) will the output be better or worse?
+  * How about other models like [Codey APIs models](https://cloud.google.com/vertex-ai/docs/generative-ai/learn/models#codey-models). I did a few manual testings and it seems Gemini is returning better result.
 * Improve [prompt.md](./prompt.md)
   * Will more training examples improve the response quality?
   * Can we experiment more rules, for example always generate script job config instead onf container job config.
-  * Can we prompt Gemini to hanlde more complex logic? For example choose between `policy` and `instanceTemplate` when defining the underlying compute resources.
+  * Can we prompt Gemini to handle more complex logic? For example choose between `policy` and `instanceTemplate` when defining the underlying compute resources.
 * Generic exploration on the capability of Gemini API and see what interesting configurations it can produce.
 * Make the tool more practical.
   * Asking for target GCP project Id and job name before creating the job.
