@@ -1,0 +1,34 @@
+The provided Batch job specifies an invalid Google Cloud location `regions/us-fake`. The `allowed_locations` field must specify valid Google Cloud locations. To fix this issue, you need to change the `allowed_locations` field to specify a valid Google Cloud location.
+
+{
+  "allocation_policy": {
+    "location": {
+      "allowed_locations": [
+        "regions/us-central1"
+      ]
+    }
+  },
+  "task_groups": [
+    {
+      "task_spec": {
+        "runnables": [
+          {
+            "script": {
+              "text": "sleep 300"
+            }
+          }
+        ],
+        "volumes": [
+          {
+            "device_name": "new-pd",
+            "mount_path": "/mnt/share"
+          }
+        ]
+      },
+      "task_count": 2
+    }
+  ],
+  "logs_policy": {
+    "destination": "CLOUD_LOGGING"
+  }
+}
