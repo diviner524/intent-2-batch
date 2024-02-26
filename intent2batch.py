@@ -1,4 +1,5 @@
 import subprocess
+import json
 from vertexai.preview.generative_models import GenerativeModel, Part
 from vertexai.preview import generative_models
 
@@ -73,4 +74,81 @@ def multiturn_generate_content():
         # subprocess.run(gcloud_command, check=True)
         print(" ".join(gcloud_command))
 
-multiturn_generate_content()
+def fix_batch_job():
+    config = {
+        "max_output_tokens": 2048,
+        "temperature": 0,
+        "top_p": 1
+    }
+    model = GenerativeModel("gemini-pro")
+    chat = model.start_chat()
+    # Load prompt from file as a string
+    prompt = load_file("./fix_my_batch_job_prompt.md")
+
+    # Send prompt to chat for initial training and rules setting
+    chat.send_message(prompt, generation_config=config, safety_settings={
+          generative_models.HarmCategory.HARM_CATEGORY_HATE_SPEECH: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+          generative_models.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+          generative_models.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+          generative_models.HarmCategory.HARM_CATEGORY_HARASSMENT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+    })
+
+    # Get input from command line on the intent description
+    while True:
+        print("--------------------------------------------------------------------------------")
+        job_str = json.load(open('./job_to_fix.json'))
+        job_description = "Batch job to fix is: " + json.dumps(job_str)
+
+        error_description = input("Please input the errors: ").strip()
+        if error_description == "exit":
+            break
+        error_description = "Errors observed: " + error_description
+
+        intent_description = job_description + error_description
+        response = chat.send_message(intent_description, generation_config=config, safety_settings={
+              generative_models.HarmCategory.HARM_CATEGORY_HATE_SPEECH: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+              generative_models.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+              generative_models.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+              generative_models.HarmCategory.HARM_CATEGORY_HARASSMENT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        })
+
+        # Get content from the GenerationResponse
+        content = response.candidates[0].content.text
+
+        # Show content to user
+        print("--------------------------------------------------------------------------------")
+        print(job_description)
+        print(error_description)
+        print("Generated content:")
+        print(content)
+
+        # Save content to file
+        with open("./fixed_job.json", "w") as f:
+            f.write(content)
+
+        gcloud_command = [
+            'gcloud', 'batch', 'jobs', 'submit', 'example-ai-job-2',
+            '--location', 'us-central1',
+            '--config', 'job_config.json'
+        ]
+
+        # Execute the gcloud command
+        print("--------------------------------------------------------------------------------")
+        print("Submitting batch job...")
+        # TODO: we should run actual gcloud command. Batch gcloud command does not support --dry-run, so I cannot do a dry-run here.
+        # subprocess.run(gcloud_command, check=True)
+        print(" ".join(gcloud_command))
+
+
+def main():
+    intent = input("""Please choose 1. generate a Batch job spec based on my intent \n 2. help fix my batch job (please put the job to fix into ./job_to_fix.json first)\n""")
+    if intent == "1":
+        multiturn_generate_content()
+    elif intent == "2":
+        fix_batch_job()
+    else:
+        print("Thanks for trying intent2batch tool, please choose between 1 and 2.")
+
+main()
+
+
