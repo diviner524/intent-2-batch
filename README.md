@@ -109,6 +109,8 @@ It's interesteing to see Gemini API is using not just our training data but also
   * Will more training examples improve the response quality?
   * Can we experiment more rules, for example always generate script job config instead onf container job config.
   * Can we prompt Gemini to handle more complex logic? For example choose between `policy` and `instanceTemplate` when defining the underlying compute resources.
+* Help customer support
+  * Can Gemini help to answer customer questions, for example, these ones from https://www.googlecloudcommunity.com?
 * Generic exploration on the capability of Gemini API and see what interesting configurations it can produce.
 * Make the tool more practical.
   * Asking for target GCP project Id and job name before creating the job.
