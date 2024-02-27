@@ -1,4 +1,6 @@
-The provided Batch job specifies an invalid Google Cloud location `regions/us-fake`. The `allowed_locations` field must specify valid Google Cloud locations. To fix this issue, you need to change the `allowed_locations` field to specify a valid Google Cloud location.
+The provided Batch job specifies a non-existent region `us-fake` in the `allowed_locations` field. The `allowed_locations` field can only specify valid GCP regions or zones.
+
+To fix this issue, you need to change the `allowed_locations` field to specify a valid GCP region or zone. For example, you can change it to `["regions/us-central1"]` to specify the `us-central1` region.
 
 {
   "allocation_policy": {
@@ -21,7 +23,8 @@ The provided Batch job specifies an invalid Google Cloud location `regions/us-fa
         "volumes": [
           {
             "device_name": "new-pd",
-            "mount_path": "/mnt/share"
+            "mount_path": "/mnt/share",
+            "existing": "try"
           }
         ]
       },
