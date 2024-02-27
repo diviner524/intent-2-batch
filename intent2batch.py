@@ -99,10 +99,10 @@ def fix_batch_job():
         job_str = json.load(open('./job_to_fix.json'))
         job_description = "Batch job to fix is: " + json.dumps(job_str)
 
-        error_description = input("Please input the errors: ").strip()
+        error_description = input("What bothers you? (You can input errors or your intent): ").strip()
         if error_description == "exit":
             break
-        error_description = "Errors observed: " + error_description
+        error_description = "Errors or intent: " + error_description
 
         intent_description = job_description + error_description
         response = chat.send_message(intent_description, generation_config=config, safety_settings={
