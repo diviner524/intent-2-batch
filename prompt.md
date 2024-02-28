@@ -17,9 +17,9 @@ Description of intent: a basic job which runs a very simple test script, it requ
                 ],
                 "computeResource": {
                     "cpuMilli": 2000,
-                    "memoryMib": 16
+                    "memoryMib": 2000
                 },
-                "maxRetryCount": 2,
+                "maxRetryCount": 1,
                 "maxRunDuration": "3600s"
             },
             "taskCount": 1,
@@ -29,7 +29,7 @@ Description of intent: a basic job which runs a very simple test script, it requ
     "allocationPolicy": {
         "instances": [
             {
-                "policy": { "machineType": "e2-standard-4" }
+                "policy": { "machineType": "e2-highcpu-2" }
             }
         ]
     },

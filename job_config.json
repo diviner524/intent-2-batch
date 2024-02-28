@@ -11,9 +11,9 @@
         ],
         "computeResource": {
           "cpuMilli": 2000,
-          "memoryMib": 16
+          "memoryMib": 2000
         },
-        "maxRetryCount": 2,
+        "maxRetryCount": 1,
         "maxRunDuration": "3600s"
       },
       "taskCount": 5,
