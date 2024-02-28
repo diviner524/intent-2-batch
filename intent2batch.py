@@ -50,29 +50,31 @@ def multiturn_generate_content():
 
         # Show content to user
         print("--------------------------------------------------------------------------------")
-        print("Generated content:")
+        print("Generated job config:")
         print(content)
 
-        # Save content to file
+        happy = input("Are you happy with the job config: Y/N\n").strip()
+        if happy == 'Y':
+            pass
+        else:
+            # TODO: Add the iterative part
+            break
+        
         with open("./job_config.json", "w") as f:
             f.write(content)
-        
-        # Creating a batch job using gcloud and the saved job config 
 
-        # Construct the gcloud command
-        # TODO: let user specify the job name, or generate a random name
+        job_name = input("Please type in a job_name: ").strip()
+        location = input("Please type in a location: ").strip()
+
+
         gcloud_command = [
-            'gcloud', 'batch', 'jobs', 'submit', 'example-ai-job-2',
-            '--location', 'us-central1',
+            'gcloud', 'batch', 'jobs', 'submit', job_name,
+            '--location', location,
             '--config', 'job_config.json'
         ]
-
-        # Execute the gcloud command
-        print("--------------------------------------------------------------------------------")
-        print("Submitting batch job...")
-        # TODO: we should run actual gcloud command. Batch gcloud command does not support --dry-run, so I cannot do a dry-run here.
-        # subprocess.run(gcloud_command, check=True)
         print(" ".join(gcloud_command))
+        print("Submitting the batch job...")
+        subprocess.run(gcloud_command, check=True)
 
 def fix_batch_job():
     config = {
