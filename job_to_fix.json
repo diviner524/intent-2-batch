@@ -1,8 +1,20 @@
 {
   "allocation_policy": {
+    "instances": [
+      {
+        "policy": {
+          "disks": [
+            {
+              "device_name": "existingpd",
+              "existing_disk": "projects/testproject/zones/us-central1-c/disks/existingpd"
+            }
+          ]
+        }
+      }
+    ],
     "location": {
       "allowed_locations": [
-        "regions/us-fake"
+        "regions/us-central1"
       ]
     }
   },
@@ -18,8 +30,9 @@
         ],
         "volumes": [
           {
-            "device_name": "new-pd",
-            "mount_path": "/mnt/share"
+            "device_name": "existingpd",
+            "mount_path": "/mnt/disks/batchjob-disk",
+            "mount_option": "rw"
           }
         ]
       },

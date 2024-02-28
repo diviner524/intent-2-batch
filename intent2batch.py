@@ -130,7 +130,7 @@ def fix_batch_job():
     # Get input from command line on the intent description
     while True:
         print("--------------------------------------------------------------------------------")
-        job_file = input("What's your job? (Please input job file path): ").strip()
+        job_file = input("What's your job? (Please input the job file path): ").strip()
         if job_file == "exit":
             break
         job_str = json.load(open(job_file))
