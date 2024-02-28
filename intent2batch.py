@@ -130,7 +130,10 @@ def fix_batch_job():
     # Get input from command line on the intent description
     while True:
         print("--------------------------------------------------------------------------------")
-        job_str = json.load(open('./job_to_fix.json'))
+        job_file = input("What's your job? (Please input the job file path): ").strip()
+        if job_file == "exit":
+            break
+        job_str = json.load(open(job_file))
         job_description = "Batch job to fix is: " + json.dumps(job_str)
 
         error_description = input("What bothers you? (You can input errors or your intent): ").strip()
@@ -152,7 +155,9 @@ def fix_batch_job():
         # Show content to user
         print("--------------------------------------------------------------------------------")
         print(job_description)
+        print("")
         print(error_description)
+        print("")
         print("Generated content:")
         print(content)
 
@@ -175,7 +180,7 @@ def fix_batch_job():
 
 
 def main():
-    intent = input("""Please choose 1. generate a Batch job spec based on my intent \n 2. help fix my batch job (please put the job to fix into ./job_to_fix.json first)\n""")
+    intent = input("""Please choose 1. generate a Batch job spec based on my intent \n 2. help fix my batch job \n""")
     if intent == "1":
         multiturn_generate_content()
     elif intent == "2":

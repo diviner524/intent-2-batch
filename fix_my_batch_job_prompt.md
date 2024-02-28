@@ -44,7 +44,7 @@ To fix this issue, you need to change the `mount_option` to `ro` in the `volumes
         ],
         "volumes": [
           {
-            "device_name": "batch-e2e-test-existingpd",
+            "device_name": "existingpd",
             "mount_path": "/mnt/disks/share",
             "mount_option": "ro"
           }
@@ -57,7 +57,6 @@ To fix this issue, you need to change the `mount_option` to `ro` in the `volumes
     "destination": "CLOUD_LOGGING"
   }
 }
-
 
 Example 2:
 
@@ -153,6 +152,51 @@ The provided Batch job specifies multiple locations end up in multiple regions u
         ]
       },
       "task_count":2
+    }
+  ],
+  "logs_policy": {
+    "destination": "CLOUD_LOGGING"
+  }
+}
+
+Example 4:
+
+Batch job to fix is: {"allocation_policy": {"location": {"allowed_locations": ["regions/us-fake"]}}, "task_groups": [{"task_spec": {"runnables": [{"script": {"text": "sleep 300"}}], "volumes": [{"device_name": "new-pd", "mount_path": "/mnt/share", "existing": "try"}]}, "task_count": 2}], "logs_policy": {"destination": "CLOUD_LOGGING"}}
+
+Errors or intent: us-fake is not supported
+
+The answer is:
+The provided Batch job specifies a non-existent region `us-fake` in the `allowed_locations` field. The `allowed_locations` field can only specify valid GCP regions or zones.
+
+To fix this issue, you need to change the `allowed_locations` field to specify a valid GCP region or zone. For example, you can change it to `["regions/us-central1"]` to specify the `us-central1` region.
+
+{
+  "allocation_policy": {
+    "location": {
+      "allowed_locations": [
+        "regions/us-central1"
+      ]
+    }
+  },
+  "task_groups": [
+    {
+      "task_spec": {
+        "runnables": [
+          {
+            "script": {
+              "text": "sleep 300"
+            }
+          }
+        ],
+        "volumes": [
+          {
+            "device_name": "new-pd",
+            "mount_path": "/mnt/share",
+            "existing": "try"
+          }
+        ]
+      },
+      "task_count": 2
     }
   ],
   "logs_policy": {
