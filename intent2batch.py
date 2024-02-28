@@ -59,9 +59,39 @@ def multiturn_generate_content():
         if happy == 'Y':
             pass
         else:
-            # TODO: Add the iterative part
-            break
-        
+            # Load prompt from file ./iterative_prompt.md as a string
+            prompt = load_file("./iterative_prompt.md")
+            # Send prompt to chat for initial training and rules setting
+            chat.send_message(prompt, generation_config=config, safety_settings={
+                  generative_models.HarmCategory.HARM_CATEGORY_HATE_SPEECH: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                  generative_models.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                  generative_models.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                  generative_models.HarmCategory.HARM_CATEGORY_HARASSMENT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+            })
+            while happy == 'N':
+                print("--------------------------------------------------------------------------------")
+                update_description = input("Describe the fields you want to update: ").strip()
+                if update_description == "exit":
+                    break
+                update_description = "Current job is: " + content + "\nUser's update request is: " + update_description
+                response = chat.send_message(update_description, generation_config=config, safety_settings={
+                    generative_models.HarmCategory.HARM_CATEGORY_HATE_SPEECH: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                    generative_models.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                    generative_models.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                    generative_models.HarmCategory.HARM_CATEGORY_HARASSMENT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+                })
+
+                # Get content from the GenerationResponse
+                content = response.candidates[0].content.text
+                content = content.strip('```')
+                content = content.strip('json')
+
+                # Show content to user
+                print("--------------------------------------------------------------------------------")
+                print("Generated job config:")
+                print(content)
+                happy = input("Are you happy with the job config: Y/N\n").strip()
+
         with open("./job_config.json", "w") as f:
             f.write(content)
 

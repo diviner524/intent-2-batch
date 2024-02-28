@@ -63,9 +63,9 @@ Generated content:
         ],
         "computeResource": {
           "cpuMilli": 2000,
-          "memoryMib": 16
+          "memoryMib": 2000
         },
-        "maxRetryCount": 2,
+        "maxRetryCount": 1,
         "maxRunDuration": "3600s"
       },
       "taskCount": 5,
@@ -83,6 +83,61 @@ Generated content:
     "destination": "CLOUD_LOGGING"
   }
 }
+```
+
+* Update your batch job.
+
+After each time your batch job is generated, the program will ask whether you are happy with the generated job config or not. If you select `N` as not satisfacted, the program will let you to describe the fields you want to update, example is as below:
+```
+Are you happy with the job config: Y/N
+N
+--------------------------------------------------------------------------------
+Describe the field you want to update: I want to update machine type as e2-medium.
+--------------------------------------------------------------------------------
+Generated job config:
+
+{
+  "taskGroups": [
+    {
+      "taskSpec": {
+        "runnables": [
+          {
+            "script": {
+              "text": "echo Hello world! This is task ${BATCH_TASK_INDEX}. This job has a total of ${BATCH_TASK_COUNT} tasks."
+            }
+          }
+        ],
+        "computeResource": {
+          "cpuMilli": 2000,
+          "memoryMib": 2000
+        },
+        "maxRetryCount": 1,
+        "maxRunDuration": "3600s"
+      },
+      "taskCount": 5,
+      "parallelism": 5
+    }
+  ],
+  "allocationPolicy": {
+    "instances": [
+      {
+        "policy": { "machineType": "e2-medium", "provisioningModel": "SPOT" }  # changed from "e2-highcpu-2" to "e2-medium"
+      }
+    ]
+  },
+  "logsPolicy": {
+    "destination": "CLOUD_LOGGING"
+  }
+}
+```
+
+You can choose to update field one by one, or updates multiple fields at the same time. For example, you can describe the fields you want to update also as `I want to update task count to be 10, machine type as e2-medium, max retry count to be 3`.
+
+* Submit your satifacted batch job.
+
+If you select "Y" as you are happy with the generated job config, the program will ask you about the job name and location you want to feed, and help you directly submit the job through gcloud command.
+
+```
 --------------------------------------------------------------------------------
 Submitting batch job...
 gcloud batch jobs submit example-ai-job-2 --location us-central1 --config job_config.json
