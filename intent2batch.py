@@ -47,6 +47,8 @@ def multiturn_generate_content():
 
         # Get content from the GenerationResponse
         content = response.candidates[0].content.text
+        content = content.strip('```')
+        content = content.strip('json')
 
         # Show content to user
         print("--------------------------------------------------------------------------------")
