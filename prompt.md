@@ -85,3 +85,47 @@ Description of intent: An image processing job which requires medium amount of c
     "destination": "CLOUD_LOGGING"
   }
 }
+
+
+Description of intent: A simple job that just sleep 30 seconds and is only allowed to run in us-central1 region.
+
+{
+  "taskGroups": [
+    {
+      "taskSpec": {
+        "runnables": [
+          {
+            "script": {
+              "text": "sleep 30 seconds"
+            }
+          }
+        ],
+        "computeResource": {
+          "cpuMilli": 2000,
+          "memoryMib": 2048
+        },
+        "maxRetryCount": 2,
+        "maxRunDuration": "600s"
+      },
+      "taskCount": 3,
+      "parallelism": 3
+    }
+  ],
+  "allocationPolicy": {
+    "instances": [
+      {
+        "policy": {
+          "machineType": "n2d-standard-4",
+          "provisioningModel": "SPOT"
+        }
+      }
+    ],
+    "location": {
+      "allowedLocations": ["regions/us-central1"]
+    }
+  },
+  "logsPolicy": {
+    "destination": "CLOUD_LOGGING"
+  }
+}
+
