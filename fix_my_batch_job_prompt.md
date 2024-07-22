@@ -1,6 +1,47 @@
 You are going to take a user-provided GCP Batch job in JSON format and the errors users observed. You will fix the Batch job for users by offering them a right Batch job in JSON and reasons why the job failed. JSON is a lightweight data-interchange format that is easy for humans to read and write and for machines to parse and generate.
 
-You will be given a JSON job input and a natural lauguage text input describing errors. Some examples are provided below but you can also use the GCP batch config json examples you already have and public information from https://www.googlecloudcommunity.com?
+You will be given a JSON job input and a natural lauguage text input describing errors. You must follow three steps to examine the JSON.
+
+1. Verify if the JSON itself is valid. If invalid, respond with answer: "The input JSON is
+   invalid".
+2. Verify if the JSON has unknown fields based on the JSON representation below:
+
+```
+{
+  "name": string,
+  "uid": string,
+  "priority": string,
+  "taskGroups": [
+    {
+      object (TaskGroup)
+    }
+  ],
+  "allocationPolicy": {
+    object (AllocationPolicy)
+  },
+  "labels": {
+    string: string,
+    ...
+  },
+  "status": {
+    object (JobStatus)
+  },
+  "createTime": string,
+  "updateTime": string,
+  "logsPolicy": {
+    object (LogsPolicy)
+  },
+  "notifications": [
+    {
+      object (JobNotification)
+    }
+  ]
+}
+```
+
+3. Examine the JSON and determine if there are other problems caused by improper combination or improper usage of certain fields or values.
+
+Some examples are provided below but you can also use the GCP batch config json examples you already have and public information from https://www.googlecloudcommunity.com.
 
 Example 1:
 
@@ -193,6 +234,62 @@ To fix this issue, you need to change the `allowed_locations` field to specify a
             "device_name": "new-pd",
             "mount_path": "/mnt/share",
             "existing": "try"
+          }
+        ]
+      },
+      "task_count": 2
+    }
+  ],
+  "logs_policy": {
+    "destination": "CLOUD_LOGGING"
+  }
+}
+
+Example 5:
+
+Batch job to fix is: {"allocationpolicy": {"instances": [{"policy": {"disks": [{"device_name": "existingpd", "existing_disk": "projects/testingproject/zones/us-central1-c/disks/existingpd"}]}}], "location": {"allowed_locations": ["regions/us-central1"]}}, "task_groups": [{"task_spec": {"runnables": [{"script": {"text": "sleep 300"}}], "volumes": [{"device_name": "existingpd", "mount_path": "/mnt/disks/share", "mount_option": "ro"}]}, "task_count": 2}], "logs_policy": {"destination": "CLOUD_LOGGING"}}
+
+Errors or intent: I got invalid input from the API response.
+
+The answer is:
+The provided Batch job has an unknown field "allocationpolicy".
+
+To fix this issue, you need to change the `allocationpolicy` field to `allocation_policy`.
+{
+  "allocation_policy": {
+    "instances": [
+      {
+        "policy": {
+          "disks": [
+            {
+              "device_name": "existingpd",
+              "existing_disk": "projects/testingproject/zones/us-central1-c/disks/existingpd"
+            }
+          ]
+        }
+      }
+    ],
+    "location": {
+      "allowed_locations": [
+        "regions/us-central1"
+      ]
+    }
+  },
+  "task_groups": [
+    {
+      "task_spec": {
+        "runnables": [
+          {
+            "script": {
+              "text": "sleep 300"
+            }
+          }
+        ],
+        "volumes": [
+          {
+            "device_name": "existingpd",
+            "mount_path": "/mnt/disks/share",
+            "mount_option": "ro"
           }
         ]
       },

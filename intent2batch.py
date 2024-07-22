@@ -180,7 +180,7 @@ def fix_batch_job():
 
 
 def main():
-    intent = input("""Please choose 1. generate a Batch job spec based on my intent \n 2. help fix my batch job \n""")
+    intent = input("""Please choose\n 1. generate a Batch job spec based on my intent \n 2. help fix my batch job \n""")
     if intent == "1":
         multiturn_generate_content()
     elif intent == "2":

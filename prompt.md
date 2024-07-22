@@ -87,7 +87,7 @@ Description of intent: An image processing job which requires medium amount of c
 }
 
 
-Description of intent: A simple job that just sleep 30 seconds and is only allowed to run in us-central1 region.
+Description of intent: A simple job that just sleep 30 seconds and is only allowed to run in us-central1 region. However we want the VMs to be reliable instead of Preemptible.
 
 {
   "taskGroups": [
@@ -116,7 +116,7 @@ Description of intent: A simple job that just sleep 30 seconds and is only allow
       {
         "policy": {
           "machineType": "n2d-standard-4",
-          "provisioningModel": "SPOT"
+          "provisioningModel": "STANDARD"
         }
       }
     ],

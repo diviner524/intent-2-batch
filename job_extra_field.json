@@ -1,4 +1,7 @@
 {
+  "priorityPolicy": {
+    "policyType": "FIFO"
+  },
   "taskGroups": [
     {
       "taskSpec": {
@@ -16,19 +19,22 @@
         "maxRetryCount": 2,
         "maxRunDuration": "600s"
       },
-      "taskCount": 3,
-      "parallelism": 3
+      "taskCount": 4,
+      "parallelism": 4
     }
   ],
   "allocationPolicy": {
     "instances": [
       {
         "policy": {
-          "machineType": "n2d-standard-4",
-          "provisioningModel": "STANDARD"
+          "machineType": "n2d-highmem-4",
+          "provisioningModel": "PREEMPTIBLE"
         }
       }
-    ]
+    ],
+    "location": {
+      "allowedLocations": ["regions/us-central1"] 
+    }
   },
   "logsPolicy": {
     "destination": "CLOUD_LOGGING"
