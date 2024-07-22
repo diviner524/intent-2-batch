@@ -253,3 +253,50 @@ Errors or intent: I got invalid input from the API response.
 
 The answer is:
 The provided Batch job has an unknown field "allocationpolicy".
+
+To fix this issue, you need to change the `allocationpolicy` field to `allocation_policy`.
+{
+  "allocation_policy": {
+    "instances": [
+      {
+        "policy": {
+          "disks": [
+            {
+              "device_name": "existingpd",
+              "existing_disk": "projects/testingproject/zones/us-central1-c/disks/existingpd"
+            }
+          ]
+        }
+      }
+    ],
+    "location": {
+      "allowed_locations": [
+        "regions/us-central1"
+      ]
+    }
+  },
+  "task_groups": [
+    {
+      "task_spec": {
+        "runnables": [
+          {
+            "script": {
+              "text": "sleep 300"
+            }
+          }
+        ],
+        "volumes": [
+          {
+            "device_name": "existingpd",
+            "mount_path": "/mnt/disks/share",
+            "mount_option": "ro"
+          }
+        ]
+      },
+      "task_count": 2
+    }
+  ],
+  "logs_policy": {
+    "destination": "CLOUD_LOGGING"
+  }
+}
